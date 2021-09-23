@@ -1,0 +1,76 @@
+/* .html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, main {
+  border: 1px solid red;
+} */
+
+.body {
+  min-height: 100vw;
+  background-color: #fff;
+}
+
+.page {
+  min-width: 320px;
+  max-width: 1280px;
+  margin: auto;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  color: #000;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+.logo {
+  width: 38px;
+  height: 38px;
+}
+
+.link {
+  text-decoration: none;
+  color: #000;
+}
+
+.link:hover {
+  color: #a0a0a0;
+  transition: color .2s linear 0s;
+}
+
+.about-project {
+  padding: 110px 70px;
+}
+
+.section-title {
+  margin: 0;
+  padding-bottom: 23px;
+  font-weight: normal;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: -0.04em;
+}
+
+.decor-title {
+  border-bottom: 1px solid #000;
+}
+
+.decor-title_type_about {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
