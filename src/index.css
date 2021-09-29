@@ -11,9 +11,10 @@
 @import url('./components/AboutMe/AboutMe.css');
 @import url('./components/Portfolio/Portfolio.css');
 @import url('./components/Footer/Footer.css');
-/* @import url('./components/'); */
-/* @import url('./components/'); */
-/* @import url('./components/'); */
+
+@import url('./components/Navigation/Navigation.css');
+@import url('./components/Movies/Movies.css');
+@import url('./components/BurgerMenu/BurgerMenu.css');
 /* @import url('./components/'); */
 /* @import url('./components/'); */
 

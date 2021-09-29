@@ -44,9 +44,23 @@ time, mark, audio, video, main {
   height: 38px;
 }
 
+.btn {
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:focus {
+  outline: none;
+}
+
 .link {
   text-decoration: none;
   color: #000;
+}
+
+.link_active {
+  font-weight: 500;
 }
 
 .link:hover {
@@ -73,4 +87,11 @@ time, mark, audio, video, main {
 
 .decor-title_type_about {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+@media screen and (max-width: 850px) {
+  .link_active {
+    font-weight: 400;
+    border-bottom: 2px solid #000;
+  }
 }

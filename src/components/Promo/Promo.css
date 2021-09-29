@@ -44,20 +44,14 @@
 .promo__btn {
   width: 129px;
   height: 36px;
-  padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-sizing: border-box;
   border-radius: 3px;
   background-color: #073042;
-  cursor: pointer;
   font-weight: 500;
   font-size: 12px;
   line-height: 16px;
   color: #fff;
-}
-
-.promo__btn:focus {
-  outline: none;
 }
 
 .promo__btn:hover {
