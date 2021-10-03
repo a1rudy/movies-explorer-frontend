@@ -1,0 +1,9 @@
+.profile__form_type_login {
+  margin-bottom: 220px;
+}
+
+@media screen and (max-width: 500px) {
+  .profile__form_type_login {
+    margin-bottom: 309px;
+  }
+}

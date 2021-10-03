@@ -1,5 +1,5 @@
 .navigation {
-  min-width: 100%;
+  width: 97%;
 }
 
 .navigation_opened {
@@ -31,7 +31,7 @@
   line-height: 18px;
 }
 
-.navigation__accaunt-btn {
+.navigation__profile-btn {
   width: 100px;
   height: 32px;
   border-radius: 20px;
@@ -41,15 +41,11 @@
   line-height: 16px;
 }
 
-.navigation__accaunt-btn:hover {
-  opacity: 0.6;
-  transition: opacity 0.2s linear 0s;
-}
-
 @media screen and (max-width: 850px) {
   .navigation {
+    width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     right: 0;
@@ -101,11 +97,11 @@
     line-height: 22px;
   }
 
-  .navigation__accaunt-link {
+  .navigation__profile-link {
     align-self: center;
   }
 
-  .navigation__accaunt-btn {
+  .navigation__profile-btn {
     font-weight: 500;
     font-size: 18px;
     line-height: 22px;

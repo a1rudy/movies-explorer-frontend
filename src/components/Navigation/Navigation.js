@@ -24,12 +24,11 @@ function Navigation({ isMenuOpen }) {
             Сохранённые фильмы
           </Link>
         </div>
-        <Link className="navigation__accaunt-link" to="/accaunt">
-          <button className="navigation__accaunt-btn btn">Аккаунт</button>
+        <Link className="navigation__profile-link" to="/profile">
+          <button className="navigation__profile-btn btn" type="button">Аккаунт</button>
         </Link>
       </div>
     </nav>
-    // вопрос про аккаунт в линке, настроить активность кнопки в зависимости от местоположения
   );
 }
 

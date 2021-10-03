@@ -30,11 +30,6 @@
   line-height: 16px;
 }
 
-.header__auth-btn:hover {
-  background-color: rgba(111, 233, 168, 0.5);
-  transition: background-color 0.2s linear 0s;
-}
-
 .header__reg-link {
   color: #fff;
   font-weight: 500;

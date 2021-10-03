@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Link, Switch, useRouteMatch } from 'react-router-dom';
-import logo from '../../images/header/logo.png';
+import logo from '../../images/logo.png';
 import BurgerMenu from '../BurgerMenu/BurgerMenu';
 import Navigation from '../Navigation/Navigation';
 
@@ -15,7 +15,9 @@ function Header() {
 
   return (
     <header className={`header ${isMain ? 'header_color_azure' : ''}`}>
-      <img src={logo} alt="логотип" className="logo" />
+      <Link to="/">
+        <img src={logo} alt="логотип" className="logo" />
+      </Link>
       <Switch>
         <Route exact path="/">
           <div className="header__auth-container">
@@ -23,11 +25,11 @@ function Header() {
               Регистрация
             </Link>
             <Link className="header__auth-link" to="/signin">
-              <button className="header__auth-btn btn">Войти</button>
+              <button className="header__auth-btn btn" type="button">Войти</button>
             </Link>
           </div>
         </Route>
-        <Route path={['/movies', '/saved-movies']}>
+        <Route path={['/movies', '/saved-movies', '/profile']}>
           <Navigation isMenuOpen={isMenuOpen} />
           <BurgerMenu toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} />
         </Route>

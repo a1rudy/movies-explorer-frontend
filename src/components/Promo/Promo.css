@@ -54,11 +54,6 @@
   color: #fff;
 }
 
-.promo__btn:hover {
-  color: #a0a0a0;
-  transition: color .2s linear 0s;
-}
-
 @media screen and (max-width: 850px) {
   .promo {
     padding: 140px 0 76px;

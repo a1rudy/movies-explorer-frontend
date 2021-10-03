@@ -7,6 +7,8 @@
   }
 
   .burger-menu_opened {
+    position: fixed;
+    right: 35px;
     width: 22px;
     height: 22px;
     background: transparent url('../../images/header/header_burger-open.png') center no-repeat;
