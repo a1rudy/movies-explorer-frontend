@@ -1,54 +1,80 @@
 import React from 'react';
+import Header from '../Header/Header';
+import { useFormWithValidation } from '../../hooks/useFormWithValidation';
+import { CurrentUserContext } from '../../context/CurrentUserContext';
 
-function Profile() {
+function Profile({ onUpdateUser, onSignOut }) {
+  const { values, handleChange, isValid, setValues, resetForm } = useFormWithValidation();
+  const { name, email } = values;
+  const currentUser = React.useContext(CurrentUserContext);
+
+  React.useEffect(() => {
+    if (currentUser) {
+      resetForm(currentUser, {}, true);
+    }
+  }, [currentUser, resetForm]);
+
   function handleSubmit(evt) {
     evt.preventDefault();
+    isValid &&
+      onUpdateUser({ name, email }, () => {
+        setValues({});
+      });
   }
 
   return (
-    <main className="content">
-      <section className="profile">
-        <h2 className="profile__title">Привет, {'Алексей'}!</h2>
-        <form className="profile__form" onSubmit={handleSubmit} name="profile-form">
-          <fieldset className="profile__input-container">
-            <label className="profile__input-label" htmlFor="name-user">
-              Имя
-            </label>
-            <input
-              className="profile__input"
-              // onChange={}
-              value={'Алексей'}
-              placeholder="Имя"
-              type="text"
-              name="name-user"
-              minLength="1"
-              maxLength="100"
-              required
-            />
-          </fieldset>
-          <fieldset className="profile__input-container">
-            <label className="profile__input-label" htmlFor="name-user">
-              E-mail
-            </label>
-            <input
-              className="profile__input"
-              // onChange={}
-              value={'pochta@yandex.ru'}
-              placeholder="E-mail"
-              type="email"
-              name="name-user"
-              minLength="1"
-              maxLength="100"
-              required
-            />
-          </fieldset>
-        </form>
-        <button className="profile__edit-btn btn" type="submit">
-          Редактировать
-        </button>
-        <button className="profile__sign-out-btn btn" type="button">Выйти из аккаунта</button>
-      </section>
-    </main>
+    <>
+      <Header />
+      <main className="content">
+        <section className="profile">
+          <h2 className="profile__title">Привет, {currentUser.name}!</h2>
+          <form className="profile__form" onSubmit={handleSubmit} name="profile-form">
+            <fieldset className="profile__input-container">
+              <label className="profile__input-label" htmlFor="name-user">
+                Имя
+              </label>
+              <input
+                className="profile__input"
+                value={name || ''}
+                onChange={handleChange}
+                placeholder="Имя"
+                type="text"
+                name="name"
+                minLength="1"
+                maxLength="100"
+                required
+              />
+            </fieldset>
+            <fieldset className="profile__input-container">
+              <label className="profile__input-label" htmlFor="name-user">
+                E-mail
+              </label>
+              <input
+                className="profile__input"
+                value={email || ''}
+                onChange={handleChange}
+                placeholder="E-mail"
+                type="email"
+                name="email"
+                minLength="1"
+                maxLength="100"
+                required
+              />
+            </fieldset>
+            <button
+              className={`profile__edit-btn btn ${
+                !isValid ? 'profile__edit-btn_type_inactive' : ''
+              }`}
+              type="submit">
+              Редактировать
+            </button>
+          </form>
+          <button className="profile__sign-out-btn btn" onClick={onSignOut} type="button">
+            Выйти из аккаунта
+          </button>
+        </section>
+      </main>
+    </>
   );
 }
 

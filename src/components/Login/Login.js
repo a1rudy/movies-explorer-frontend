@@ -1,12 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useFormWithValidation } from '../../hooks/useFormWithValidation';
+import { AppContext } from '../../context/AppContext';
 import logo from '../../images/logo.png';
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-};
+function Login({ handleLogin, setAuthErrorMessage }) {
+  const { values, handleChange, errors, isValid, setValues } = useFormWithValidation();
+  const { email, password } = values;
+  const { authErrorMessage } = React.useContext(AppContext);
 
-function Login() {
+  React.useEffect(() => {
+    return () => {
+      setAuthErrorMessage(null);
+    };
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      return;
+    }
+    isValid &&
+      handleLogin({ email, password }, () => {
+        setValues({});
+      });
+  };
+
   return (
     <section className="auth">
       <div className="auth__container">
@@ -16,47 +35,49 @@ function Login() {
           </Link>
           <h2 className="auth__title">Рады видеть!</h2>
         </div>
-        <form onSubmit={handleSubmit} className="auth__form profile__form_type_login">
+        <form onSubmit={handleSubmit} className="auth__form">
           <fieldset className="auth__form-container">
             <label className="auth__input-label" htmlFor="email">
               E-mail
             </label>
             <input
               className="auth__input"
-              // onChange={}
-              value={'pochta@yandex.ru'}
+              value={email || ''}
+              onChange={handleChange}
               placeholder=""
               type="email"
               name="email"
-              minLength="2"
-              maxLength="200"
               autoComplete="on"
               required
             />
-            <span className="auth__input-error auth__input_type_error"></span>
+            <span className="auth__input-error auth__input_type_error">{errors.email}</span>
           </fieldset>
-          <fieldset className="auth__form-container">
+          <fieldset className="auth__form-container auth__form-container_type_login">
             <label className="auth__input-label" htmlFor="password">
               Пароль
             </label>
             <input
               className="auth__input"
-              // onChange={}
-              // value={}
+              value={password || ''}
+              onChange={handleChange}
               placeholder=""
               type="password"
               name="password"
-              minLength="2"
-              maxLength="200"
+              minLength="8"
               autoComplete="on"
               required
             />
-            <span className="auth__input-error"></span>
+            <span className="auth__input-error">{errors.password}</span>
+            <span className="auth__register-error">
+              {authErrorMessage ? `Что пошло не так... ${authErrorMessage}` : ''}
+            </span>
           </fieldset>
+          <button
+            className={`auth__btn btn ${!isValid ? 'auth__btn_type_inactive' : ''}`}
+            type="submit">
+            Войти
+          </button>
         </form>
-        <button className="auth__btn btn" type="submit">
-          Войти
-        </button>
         <div className="auth__signin">
           <p className="auth__reg-question">Ещё не зарегистрированы?</p>
           <Link to="/signup" className="auth__login-link link">

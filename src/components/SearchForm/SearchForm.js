@@ -2,21 +2,17 @@ import React from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 
 function SearchForm({ onSearchMovie }) {
-  const [nameMovie, setNameMovie] = React.useState('');
+  const [movieName, setMovieName] = React.useState('');
 
-  function handleChangeNameMovie(evt) {
-    setNameMovie(evt.target.value);
-  }
-
-  function onSearchMovie(data) {
-    console.log(data);
+  function handleChangeMovieName(evt) {
+    setMovieName(evt.target.value);
   }
 
   function handleSubmit(evt) {
     evt.preventDefault();
 
     onSearchMovie({
-      nameMovie: nameMovie,
+      movieName: movieName,
     });
   }
 
@@ -26,11 +22,11 @@ function SearchForm({ onSearchMovie }) {
         <div className="search-form__input-wrap">
           <input
             className="search-form__input"
-            onChange={handleChangeNameMovie}
-            value={nameMovie}
+            onChange={handleChangeMovieName}
+            value={movieName}
             type="text"
             placeholder="Фильмы"
-            name="nameMovie"
+            name="movieName"
             minLength="1"
             maxLength="100"
             required

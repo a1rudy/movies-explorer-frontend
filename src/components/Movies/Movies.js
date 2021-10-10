@@ -1,13 +1,19 @@
 import React from 'react';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
-import MoviesCardList from '../MoviesCardList/MoviesCardList'
+import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
-function Movies() {
+function Movies({ onSearchMovie }) {
   return (
-    <main className="content">
-      <SearchForm />
-      <MoviesCardList />
-    </main>
+    <>
+      <Header />
+      <main className="content">
+        <SearchForm onSearchMovie={onSearchMovie} />
+        <MoviesCardList />
+      </main>
+      <Footer />
+    </>
   );
 }
 

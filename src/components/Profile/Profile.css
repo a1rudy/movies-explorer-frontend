@@ -15,10 +15,14 @@
 
 .profile__form {
   width: 410px;
-  margin-bottom: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .profile__input-container {
+  width: 100%;
   padding: 0 0 16px;
   display: flex;
   justify-content: space-between;
@@ -27,6 +31,7 @@
 
 .profile__input-container:nth-child(2) {
   padding: 16px 0 0;
+  margin-bottom: 220px;
   border-top: 1px solid #e8e8e8;
 }
 
@@ -55,6 +60,16 @@
   line-height: 16px;
 }
 
+.profile__edit-btn_type_inactive {
+  opacity: .4;
+  color: #000;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .profile__sign-out-btn {
   background-color: #fff;
   font-weight: 500;
@@ -74,6 +89,9 @@
 
   .profile__form {
     width: 260px;
+  }
+
+  .profile__input-container:nth-child(2) {
     margin-bottom: 379px;
   }
 
