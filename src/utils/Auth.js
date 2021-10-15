@@ -1,9 +1,8 @@
 import { mainApiUrl } from './constants';
 
-const checkResponse = (response) =>
+const handleResponse = (response) =>
   response.ok ? response.json() : Promise.reject(getError(response.status));
 
-// `ошибка: ${response.status === 409 ? 'email уже существует.' : response.status}`
 
 const getError = (status) => {
   if (status === 400) {
@@ -26,7 +25,7 @@ export const register = (name, email, password) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ name, email, password }),
-  }).then(checkResponse);
+  }).then(handleResponse);
 };
 
 export const authorize = (email, password) => {
@@ -37,16 +36,5 @@ export const authorize = (email, password) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
-  }).then(checkResponse);
-};
-
-export const getUser = (token) => {
-  return fetch(`${mainApiUrl}/users/me`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  }).then(checkResponse);
+  }).then(handleResponse);
 };

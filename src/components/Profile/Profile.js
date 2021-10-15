@@ -4,7 +4,7 @@ import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 import { CurrentUserContext } from '../../context/CurrentUserContext';
 
 function Profile({ onUpdateUser, onSignOut }) {
-  const { values, handleChange, isValid, setValues, resetForm } = useFormWithValidation();
+  const { values, handleChange, errors, isValid, setValues, resetForm } = useFormWithValidation();
   const { name, email } = values;
   const currentUser = React.useContext(CurrentUserContext);
 
@@ -44,6 +44,7 @@ function Profile({ onUpdateUser, onSignOut }) {
                 maxLength="100"
                 required
               />
+              <span className="profile__input-error">{errors.name}</span>
             </fieldset>
             <fieldset className="profile__input-container">
               <label className="profile__input-label" htmlFor="name-user">
@@ -60,6 +61,7 @@ function Profile({ onUpdateUser, onSignOut }) {
                 maxLength="100"
                 required
               />
+              <span className="profile__input-error profile__input-error_type_email">{errors.email}</span>
             </fieldset>
             <button
               className={`profile__edit-btn btn ${

@@ -1,75 +1,98 @@
-import { mainApiUrl } from './constants';
+import { mainApiUrl, moviesApiUrl } from './constants';
 
-class Api {
-  constructor({ address, headers }) {
-    this._address = address;
-    this._headers = headers;
-  }
+const handleResponse = (response) =>
+  response.ok ? response.json() : Promise.reject(`ошибка: ${response.status}`);
 
-  _handleResponse(res) {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Error: ${res.status}`);
-  }
+export const register = (name, email, password) => {
+  return fetch(`${mainApiUrl}/signup`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, email, password }),
+  }).then(handleResponse);
+};
 
-  getUser() {
-    return fetch(`${this._address}/users/me`, {
-      method: 'GET',
-      headers: this._headers,
-    }).then(this._handleResponse);
-  }
+export const authorize = (email, password) => {
+  return fetch(`${mainApiUrl}/signin`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  }).then(handleResponse);
+};
 
-  updateUser(data) {
-    return fetch(`${this._address}/users/me`, {
-      method: 'PATCH',
-      headers: this._headers,
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-      }),
-    }).then(this._handleResponse);
-  }
+export const getUser = () => {
+  return fetch(`${mainApiUrl}/users/me`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    },
+  }).then(handleResponse);
+};
 
-  getMovies() {
-    return fetch(`${this._address}/movies`, {
-      method: 'GET',
-      headers: this._headers,
-    }).then(this._handleResponse);
-  }
+export const updateUser = (data) => {
+  return fetch(`${mainApiUrl}/users/me`, {
+    method: 'PATCH',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    },
+    body: JSON.stringify({
+      name: data.name,
+      email: data.email,
+    }),
+  }).then(handleResponse);
+};
 
-  createMovie(data) {
-    return fetch(`${this._address}/movies`, {
-      method: 'POST',
-      headers: this._headers,
-      body: JSON.stringify({
-        country: data.country,
-        director: data.director,
-        duration: data.duration,
-        year: data.year,
-        description: data.description,
-        image: data.image,
-        trailer: data.trailer,
-        nameRU: data.nameRU,
-        nameEN: data.nameEN,
-        thumbnail: data.thumbnail,
-        movieId: data.movieId,
-      }),
-    }).then(this._handleResponse);
-  }
+export const getMovies = () => {
+  return fetch(`${mainApiUrl}/movies`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    },
+  }).then(handleResponse);
+};
 
-  removeMovie(id) {
-    return fetch(`${this._address}/movies/${id}`, {
-      method: 'DELETE',
-      headers: this._headers,
-    }).then(this._handleResponse);
-  }
-}
+export const createMovie = (data) => {
+  return fetch(`${mainApiUrl}/movies`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    },
+    body: JSON.stringify({
+      country: data.country,
+      director: data.director,
+      duration: data.duration,
+      year: data.year,
+      description: data.description,
+      image: `${moviesApiUrl}${data.image.url}`,
+      trailer: data.trailerLink,
+      nameRU: data.nameRU,
+      nameEN: data.nameEN,
+      thumbnail: `${moviesApiUrl}${data.image.formats.thumbnail.url}`,
+      movieId: data.id,
+    }),
+  }).then(handleResponse);
+};
 
-export const mainApi = new Api({
-  address: mainApiUrl,
-  headers: {
-    'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
-    'Content-Type': 'application/json',
-  },
-});
+export const removeMovie = (id) => {
+  return fetch(`${mainApiUrl}/movies/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    },
+  }).then(handleResponse);
+};
