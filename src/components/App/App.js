@@ -19,57 +19,75 @@ import * as auth from '../../utils/Auth';
 
 function App() {
   const [moviesCards, setMoviesCards] = React.useState([]);
+  const [savedMovies, setSavedMovies] = React.useState([]);
   const [isCardsLoading, setIsCardsLoading] = React.useState(false);
   const [errorMessageMovies, setErrorMessageMovies] = React.useState(null);
   const [errorMessageSavedMovies, setErrorMessageSavedMovies] = React.useState(null);
   const [authErrorMessage, setAuthErrorMessage] = React.useState(null);
+  const [updateMessage, setUpdateMessage] = React.useState(null);
+  const [updateErrorMessage, setUpdateErrorMessage] = React.useState(null);
+  const [isDisabledForm, setIsDisabledForm] = React.useState(false);
 
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
 
-  const [savedMovies, setSavedMovies] = React.useState([]);
-
   const history = useHistory();
 
+  React.useEffect(() => {
+    if (loggedIn) {
+      setIsCardsLoading(true);
+      moviesApi
+        .getMoviesCards()
+        .then((movies) => {
+          localStorage.setItem('lastSearchMovies', JSON.stringify(movies));
+        })
+        .catch((error) => {
+          setErrorMessageMovies(serverError);
+          console.log(error);
+        })
+        .finally(() => setIsCardsLoading(false));
+    }
+  }, [loggedIn]);
+
   function handleSearchMovie(movie) {
-    setErrorMessageMovies(null);
     setIsCardsLoading(true);
+    setErrorMessageMovies(null);
     setMoviesCards([]);
-    moviesApi
-      .getMoviesCards()
-      .then((data) => {
-        const searchMovies = data.filter((item) => {
-          const nameEN = item.nameEN ? item.nameEN : item.nameRU;
-          const movieNameEN = nameEN.toLowerCase();
-          const movieNameRU = item.nameRU.toLowerCase();
-          const movieDescription = item.description.toLowerCase();
-          const searchMovieName = movie.movieName.toLowerCase();
-          const searchMovies =
-            movieNameRU.includes(searchMovieName) ||
-            movieNameEN.includes(searchMovieName) ||
-            movieDescription.includes(searchMovieName);
-          return searchMovies;
-        });
-        localStorage.setItem('lastSearchMovies', JSON.stringify(searchMovies));
-        if (searchMovies[0]) {
-          setMoviesCards(searchMovies);
-        } else {
-          setErrorMessageMovies(notFoundError);
-          setMoviesCards([]);
-        }
-      })
-      .catch(() => {
-        setErrorMessageMovies(serverError);
+    setIsCardsLoading(true);
+    const lastSearchMovies = JSON.parse(localStorage.getItem('lastSearchMovies'));
+    if (lastSearchMovies) {
+      const searchMovies = lastSearchMovies.filter((item) => {
+        const nameEN = item.nameEN ? item.nameEN : item.nameRU;
+        const movieNameEN = nameEN.toLowerCase();
+        const movieNameRU = item.nameRU.toLowerCase();
+        const movieDescription = item.description.toLowerCase();
+        const searchMovieName = movie.movieName.toLowerCase();
+        const searchMovies =
+          movieNameRU.includes(searchMovieName) ||
+          movieNameEN.includes(searchMovieName) ||
+          movieDescription.includes(searchMovieName);
+        return searchMovies;
+      });
+      setIsCardsLoading(false);
+      if (searchMovies[0]) {
+        setMoviesCards(searchMovies);
+        setIsCardsLoading(false);
+      } else {
+        setErrorMessageMovies(notFoundError);
+        setIsCardsLoading(false);
         setMoviesCards([]);
-      })
-      .finally(() => setIsCardsLoading(false));
+      }
+    }
+    if (!lastSearchMovies) {
+      setErrorMessageMovies(serverError);
+    }
   }
 
   function handleSearchSavedMovie(movie) {
     setErrorMessageSavedMovies(null);
     setIsCardsLoading(true);
-    setSavedMovies([]);
-    const filterMovies = savedMovies.filter((item) => {
+    const lastSavedMovies = JSON.parse(localStorage.getItem('lastSavedMovies'));
+    const filterMovies = lastSavedMovies.filter((item) => {
       const nameEN = item.nameEN ? item.nameEN : item.nameRU;
       const movieNameEN = nameEN.toLowerCase();
       const movieNameRU = item.nameRU.toLowerCase();
@@ -87,6 +105,7 @@ function App() {
     } else {
       setErrorMessageSavedMovies(notFoundError);
       setIsCardsLoading(false);
+      setSavedMovies([]);
     }
   }
 
@@ -119,13 +138,15 @@ function App() {
     mainApi
       .removeMovie(movieForDelete._id)
       .then(() => {
-        const newSavedMovies = savedMovies.filter(
+        const lastSavedMovies = JSON.parse(localStorage.getItem('lastSavedMovies'));
+        const newSavedMovies = lastSavedMovies.filter(
           (item) => item.movieId !== movieForDelete.movieId,
         );
         setSavedMovies(newSavedMovies);
         localStorage.setItem('lastSavedMovies', JSON.stringify(newSavedMovies));
       })
       .catch((error) => {
+        setErrorMessageMovies(`Не удалось удалить фильм: ${error}`);
         console.log(error);
       });
   }
@@ -139,6 +160,7 @@ function App() {
         localStorage.setItem('lastSavedMovies', JSON.stringify(newSavedMovies));
       })
       .catch((error) => {
+        setErrorMessageMovies(`Не удалось сохранить фильм: ${error}`);
         console.log(error);
       });
   }
@@ -159,20 +181,25 @@ function App() {
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedIn, isCardsLoading]);
+  }, [loggedIn]);
 
   function handleUpdateUser(data) {
+    setIsDisabledForm(true)
     mainApi
       .updateUser(data)
       .then((data) => {
         setCurrentUser(data);
+        setUpdateMessage('Успешно сохранено!');
       })
       .catch((error) => {
+        setUpdateErrorMessage(error);
         console.log(error);
-      });
+      })
+      .finally(() => setIsDisabledForm(false))
   }
 
   function handleRegister({ name, email, password }) {
+    setIsDisabledForm(true)
     auth
       .register(name, email, password)
       .then((user) => {
@@ -182,10 +209,12 @@ function App() {
       .catch((error) => {
         setAuthErrorMessage(error);
         console.log(error);
-      });
+      })
+      .finally(() => setIsDisabledForm(false))
   }
 
   function handleLogin({ email, password }) {
+    setIsDisabledForm(true)
     auth
       .authorize(email, password)
       .then((data) => {
@@ -195,7 +224,8 @@ function App() {
       .catch((error) => {
         setAuthErrorMessage(error);
         console.log(error);
-      });
+      })
+      .finally(() => setIsDisabledForm(false))
   }
 
   function checkToken() {
@@ -213,8 +243,6 @@ function App() {
     setMoviesCards([]);
     setSavedMovies([]);
     setCurrentUser({});
-    setErrorMessageMovies(null);
-    setErrorMessageSavedMovies(null);
     history.push('/');
   }
 
@@ -223,11 +251,14 @@ function App() {
       <AppContext.Provider
         value={{
           moviesCards: moviesCards,
+          savedMovies: savedMovies,
           isCardsLoading: isCardsLoading,
           errorMessageMovies: errorMessageMovies,
           errorMessageSavedMovies: errorMessageSavedMovies,
           authErrorMessage: authErrorMessage,
-          savedMovies: savedMovies,
+          updateMessage: updateMessage,
+          updateErrorMessage: updateErrorMessage,
+          isDisabledForm: isDisabledForm,
         }}>
         <div className="body">
           <div className="page">
@@ -244,20 +275,25 @@ function App() {
                 onSearchMovie={handleSearchMovie}
                 onSaveMovie={handleCreateMovie}
                 onDeleteMovie={handleMovieForDelete}
-                onFilterShortMovies={handleFilterShortMovies}></ProtectedRoute>
+                onFilterShortMovies={handleFilterShortMovies}
+                setErrorMessageMovies={setErrorMessageMovies}></ProtectedRoute>
               <ProtectedRoute
                 path="/saved-movies"
                 component={SavedMovies}
                 loggedIn={loggedIn}
+                setSavedMovies={setSavedMovies}
                 onSearchMovie={handleSearchSavedMovie}
                 onDeleteSavedMovie={handleDeleteMovie}
-                onFilterShortMovies={handleFilterShortSavedMovies}></ProtectedRoute>
+                onFilterShortMovies={handleFilterShortSavedMovies}
+                setErrorMessageSavedMovies={setErrorMessageSavedMovies}></ProtectedRoute>
               <ProtectedRoute
                 path="/profile"
                 component={Profile}
                 loggedIn={loggedIn}
                 onUpdateUser={handleUpdateUser}
-                onSignOut={handleLogout}></ProtectedRoute>
+                onSignOut={handleLogout}
+                setUpdateMessage={setUpdateMessage}
+                setUpdateErrorMessage={setUpdateErrorMessage}></ProtectedRoute>
               <Route path="/signin">
                 <Login handleLogin={handleLogin} setAuthErrorMessage={setAuthErrorMessage} />
                 {loggedIn ? <Redirect to="/movies" /> : <Redirect to="/signin" />}

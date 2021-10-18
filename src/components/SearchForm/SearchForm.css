@@ -10,6 +10,7 @@
 
 .search-form__form {
   margin-bottom: 42px;
+  position: relative;
 }
 
 .search-form__input-wrap {
@@ -29,6 +30,16 @@
   font-weight: 400;
   font-size: 13px;
   line-height: 17px;
+}
+
+.search-form__search-error {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #ff3055;
+  position: absolute;
+  left: 1px;
+  top: 65px;
 }
 
 .search-form__btn {

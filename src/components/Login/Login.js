@@ -5,14 +5,15 @@ import { AppContext } from '../../context/AppContext';
 import logo from '../../images/logo.png';
 
 function Login({ handleLogin, setAuthErrorMessage }) {
-  const { values, handleChange, errors, isValid, setValues } = useFormWithValidation();
+  const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
   const { email, password } = values;
-  const { authErrorMessage } = React.useContext(AppContext);
+  const { authErrorMessage, isDisabledForm } = React.useContext(AppContext);
 
   React.useEffect(() => {
     return () => {
       setAuthErrorMessage(null);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (e) => {
@@ -20,10 +21,8 @@ function Login({ handleLogin, setAuthErrorMessage }) {
     if (!email || !password) {
       return;
     }
-    isValid &&
-      handleLogin({ email, password }, () => {
-        setValues({});
-      });
+    isValid && handleLogin({ email, password });
+    resetForm();
   };
 
   return (
@@ -47,7 +46,9 @@ function Login({ handleLogin, setAuthErrorMessage }) {
               placeholder=""
               type="email"
               name="email"
+              pattern="^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*(\.\w{2,})+$"
               autoComplete="on"
+              disabled={isDisabledForm}
               required
             />
             <span className="auth__input-error auth__input_type_error">{errors.email}</span>
@@ -65,6 +66,7 @@ function Login({ handleLogin, setAuthErrorMessage }) {
               name="password"
               minLength="8"
               autoComplete="on"
+              disabled={isDisabledForm}
               required
             />
             <span className="auth__input-error">{errors.password}</span>
@@ -74,7 +76,8 @@ function Login({ handleLogin, setAuthErrorMessage }) {
           </fieldset>
           <button
             className={`auth__btn btn ${!isValid ? 'auth__btn_type_inactive' : ''}`}
-            type="submit">
+            type="submit"
+            disabled={isDisabledForm}>
             Войти
           </button>
         </form>

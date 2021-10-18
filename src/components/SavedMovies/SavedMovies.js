@@ -4,7 +4,22 @@ import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
-function SavedMovies({ onSearchMovie, onDeleteSavedMovie, onFilterShortMovies }) {
+function SavedMovies({
+  setSavedMovies,
+  onSearchMovie,
+  onDeleteSavedMovie,
+  onFilterShortMovies,
+  setErrorMessageSavedMovies,
+}) {
+  React.useEffect(() => {
+    return () => {
+      setErrorMessageSavedMovies(null);
+      const lastSavedMovies = JSON.parse(localStorage.getItem('lastSavedMovies'));
+      setSavedMovies(lastSavedMovies);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <Header />
