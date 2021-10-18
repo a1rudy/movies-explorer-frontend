@@ -1,5 +1,6 @@
 import React from 'react';
 import arrow from '../../images/portfolio/portfolio__link-arrow.png'
+import { landing, adaptive, application } from '../../utils/constants';
 
 function Portfolio() {
   return (
@@ -9,7 +10,7 @@ function Portfolio() {
         <li>
           <a
             className="portfolio__link portfolio__link_type_underline link"
-            href="https://a1rudy.github.io/how-to-learn"
+            href={landing}
             target="_blank"
             rel="noreferrer">
             Статичный сайт
@@ -19,7 +20,7 @@ function Portfolio() {
         <li>
           <a
             className="portfolio__link portfolio__link_type_underline link"
-            href="https://a1rudy.github.io/russian-travel/"
+            href={adaptive}
             target="_blank"
             rel="noreferrer">
             Адаптивный сайт
@@ -29,7 +30,7 @@ function Portfolio() {
         <li>
           <a
             className="portfolio__link link"
-            href="https://project-mesto-by-a1rudy.nomoredomains.monster/main"
+            href={application}
             target="_blank"
             rel="noreferrer">
             Одностраничное приложение

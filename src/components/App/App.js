@@ -12,7 +12,7 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
-import { notFoundError, serverError, shortMovie } from '../../utils/constants';
+import { notFoundError, serverError, shortMovie, successUpdateMessage } from '../../utils/constants';
 import { moviesApi } from '../../utils/MoviesApi';
 import * as mainApi from '../../utils/MainApi';
 import * as auth from '../../utils/Auth';
@@ -71,10 +71,8 @@ function App() {
       setIsCardsLoading(false);
       if (searchMovies[0]) {
         setMoviesCards(searchMovies);
-        setIsCardsLoading(false);
       } else {
         setErrorMessageMovies(notFoundError);
-        setIsCardsLoading(false);
         setMoviesCards([]);
       }
     }
@@ -99,23 +97,26 @@ function App() {
         movieDescription.includes(searchMovieName);
       return filterMovies;
     });
+    setIsCardsLoading(false);
     if (filterMovies[0]) {
       setSavedMovies(filterMovies);
-      setIsCardsLoading(false);
     } else {
       setErrorMessageSavedMovies(notFoundError);
-      setIsCardsLoading(false);
       setSavedMovies([]);
     }
   }
 
   function handleFilterShortMovies(isChecked) {
-    if (isChecked) {
+    if (isChecked && moviesCards[0]) {
       const shortMoviesCards = moviesCards.filter((item) => item.duration <= shortMovie);
       setMoviesCards(shortMoviesCards);
-    } else {
+    }
+    if (!isChecked && moviesCards[0]) {
       const lastSearchMovies = JSON.parse(localStorage.getItem('lastSearchMovies'));
       setMoviesCards(lastSearchMovies);
+    }
+    if (!moviesCards[0]) {
+      setErrorMessageMovies(notFoundError);
     }
   }
 
@@ -184,22 +185,22 @@ function App() {
   }, [loggedIn]);
 
   function handleUpdateUser(data) {
-    setIsDisabledForm(true)
+    setIsDisabledForm(true);
     mainApi
       .updateUser(data)
       .then((data) => {
         setCurrentUser(data);
-        setUpdateMessage('Успешно сохранено!');
+        setUpdateMessage(successUpdateMessage);
       })
       .catch((error) => {
         setUpdateErrorMessage(error);
         console.log(error);
       })
-      .finally(() => setIsDisabledForm(false))
+      .finally(() => setIsDisabledForm(false));
   }
 
   function handleRegister({ name, email, password }) {
-    setIsDisabledForm(true)
+    setIsDisabledForm(true);
     auth
       .register(name, email, password)
       .then((user) => {
@@ -210,11 +211,11 @@ function App() {
         setAuthErrorMessage(error);
         console.log(error);
       })
-      .finally(() => setIsDisabledForm(false))
+      .finally(() => setIsDisabledForm(false));
   }
 
   function handleLogin({ email, password }) {
-    setIsDisabledForm(true)
+    setIsDisabledForm(true);
     auth
       .authorize(email, password)
       .then((data) => {
@@ -225,7 +226,7 @@ function App() {
         setAuthErrorMessage(error);
         console.log(error);
       })
-      .finally(() => setIsDisabledForm(false))
+      .finally(() => setIsDisabledForm(false));
   }
 
   function checkToken() {

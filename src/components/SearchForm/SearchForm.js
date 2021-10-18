@@ -1,20 +1,32 @@
 import React from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
+import { useFormWithValidation } from '../../hooks/useFormWithValidation';
+import { searchError } from '../../utils/constants';
 
 function SearchForm({ onSearchMovie, onFilterShortMovies }) {
-  const [movieName, setMovieName] = React.useState('');
-
-  function handleChangeMovieName(evt) {
-    setMovieName(evt.target.value);
-  }
+  const { values, handleChange, isValid, resetForm } = useFormWithValidation();
+  const { name } = values;
+  const [searchErrorMessage, setSearchErrorMessage] = React.useState(null);
 
   function handleSubmit(evt) {
     evt.preventDefault();
-
-    onSearchMovie({
-      movieName: movieName,
-    });
+    if (isValid && name !== '') {
+      onSearchMovie({
+        movieName: name,
+      });
+      setSearchErrorMessage(null)
+    } else {
+      setSearchErrorMessage(searchError);
+    }
   }
+
+  React.useEffect(() => {
+    return () => {
+      setSearchErrorMessage(null)
+      resetForm();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <section className="search-form">
@@ -22,17 +34,19 @@ function SearchForm({ onSearchMovie, onFilterShortMovies }) {
         <div className="search-form__input-wrap">
           <input
             className="search-form__input"
-            onChange={handleChangeMovieName}
-            value={movieName}
+            onChange={handleChange}
+            value={name || ''}
             type="text"
             placeholder="Фильмы"
-            name="movieName"
+            name="name"
             minLength="1"
             maxLength="100"
-            required
           />
           <button className="search-form__btn btn" type="submit"></button>
         </div>
+        <span className="search-form__search-error">
+          {searchErrorMessage ? `${searchErrorMessage}` : ''}
+        </span>
       </form>
       <FilterCheckbox onFilterShortMovies={onFilterShortMovies} />
       <div className="search-form__decor-line"></div>

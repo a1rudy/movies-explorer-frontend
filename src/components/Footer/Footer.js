@@ -1,5 +1,6 @@
 import React from 'react';
 import './Footer.css';
+import { instagramLink, githubLink } from '../../utils/constants';
 
 function Footer() {
   return (
@@ -20,7 +21,7 @@ function Footer() {
           <li>
             <a
               className="footer__link footer__link_type_margin link"
-              href="https://github.com/a1rudy"
+              href={githubLink}
               target="_blank"
               rel="noreferrer">
               GitHub
@@ -29,7 +30,7 @@ function Footer() {
           <li>
             <a
               className="footer__link link"
-              href="https://www.instagram.com/rudoyao/"
+              href={instagramLink}
               target="_blank"
               rel="noreferrer">
               Instagram
