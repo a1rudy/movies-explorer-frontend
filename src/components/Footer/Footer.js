@@ -1,12 +1,13 @@
 import React from 'react';
 import './Footer.css';
+import { instagramLink, githubLink } from '../../utils/constants';
 
 function Footer() {
   return (
     <footer className="footer">
       <p className="footer__copyright">Учебный проект Яндекс.Практикум х BeatFilm.</p>
       <div className="footer__links-container">
-        <p className="footer__copyright-year">&copy; 2021</p>
+        <p className="footer__copyright-year">&copy; {new Date().getFullYear()}</p>
         <ul className="footer__links">
           <li>
             <a
@@ -20,7 +21,7 @@ function Footer() {
           <li>
             <a
               className="footer__link footer__link_type_margin link"
-              href="https://github.com/a1rudy"
+              href={githubLink}
               target="_blank"
               rel="noreferrer">
               GitHub
@@ -29,7 +30,7 @@ function Footer() {
           <li>
             <a
               className="footer__link link"
-              href="https://www.instagram.com/rudoyao/"
+              href={instagramLink}
               target="_blank"
               rel="noreferrer">
               Instagram

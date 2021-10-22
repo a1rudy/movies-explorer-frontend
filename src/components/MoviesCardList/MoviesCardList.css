@@ -2,6 +2,21 @@
   width: 100%;
 }
 
+.movies-card-list__loader-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.movies-card-list__error-message {
+  max-width: 75%;
+  margin: 0;
+  padding-top: 70px;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+}
+
 .movies-card-list__container {
   min-height: 480px;
   padding: 70px 0 10px;
@@ -13,6 +28,10 @@
 
 .more-movies-card {
   padding: 50px 0 80px;
+  display: none;
+}
+
+.more-movies-card_type_active {
   display: flex;
   justify-content: center;
 }

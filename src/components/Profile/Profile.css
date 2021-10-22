@@ -15,18 +15,24 @@
 
 .profile__form {
   width: 410px;
-  margin-bottom: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .profile__input-container {
+  width: 100%;
   padding: 0 0 16px;
   display: flex;
   justify-content: space-between;
   border: none;
+  position: relative;
 }
 
 .profile__input-container:nth-child(2) {
   padding: 16px 0 0;
+  margin-bottom: 220px;
   border-top: 1px solid #e8e8e8;
 }
 
@@ -47,12 +53,52 @@
   line-height: 13px;
 }
 
+.profile__input-error {
+  width: 410px;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #ff3055;
+  position: absolute;
+  left: 1px;
+  top: 15px;
+}
+
+.profile__input-error_type_email {
+  top: 30px;
+}
+
+.profile__update-message {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #30ff30;
+  position: absolute;
+  left: 1px;
+  top: 60px;
+}
+
+.profile__update-message_type_error {
+  color: #ff3055;
+}
+
 .profile__edit-btn {
   margin-bottom: 16px;
   background-color: #fff;
   font-weight: 400;
   font-size: 13px;
   line-height: 16px;
+  color: #000;
+}
+
+.profile__edit-btn_type_inactive {
+  opacity: .4;
+  color: #000;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .profile__sign-out-btn {
@@ -74,10 +120,17 @@
 
   .profile__form {
     width: 260px;
+  }
+
+  .profile__input-container:nth-child(2) {
     margin-bottom: 379px;
   }
 
   .profile__input {
     width: 80%;
+  }
+
+  .profile__input-error {
+    width: 260px;
   }
 }
