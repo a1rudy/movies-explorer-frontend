@@ -204,7 +204,6 @@ function App() {
     auth
       .register(name, email, password)
       .then((user) => {
-        console.log(user);
         handleLogin({ email, password });
       })
       .catch((error) => {
